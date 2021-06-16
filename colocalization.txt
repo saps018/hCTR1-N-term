@@ -1,0 +1,63 @@
+run("Color Picker..."); 
+setForegroundColor(0, 0, 0);
+setBackgroundColor(0, 0, 0);
+run("Close");
+pt = getDirectory("Welcome to Colocalization Macro. Choose your working directory! ");
+count = 1; 
+listFiles(pt); 
+function listFiles(pt) {
+	list = getFileList(pt);
+	for (q=0; q<list.length; q++) {
+		if (endsWith(list[q], ".tif"))
+		n=((count++));
+	}
+	for (i=1; i<=n ; i++) {
+		ima = pt+i+".tif"; 
+		proi = pt+i+".zip";	
+		if (File.exists(proi)){
+			open(proi); 
+			nROIs = roiManager("count");
+			j = 0;
+			while (j< nROIs){
+				open(ima); 
+				name = getTitle;
+				roiManager("Select", j);
+				run("Clear Outside"); 
+				run("Split Channels"); 
+				//selectWindow(name+" (green)");
+				close();
+				//run("Colocalisation Test", "channel_1=["+ima+" (red)] channel_2=["+ima+" (green)] roi=None randomization=[Costes approximation (smoothed noise)]");
+				run("Manders Coefficients", "channel_1=["+ima+" (red)] channel_2=["+ima+" (green)] channel=[Red : Green] use=None current_slice_only use_threshold exclude_zero-zero_pixels");
+				close(); // closes red channel
+				close(); // // closes green channel to get ready for next iteration
+				j = j+1;
+			}
+			if (isOpen("ROI Manager")) {
+				selectWindow("ROI Manager");
+				run("Close");
+			}
+		}
+		else{
+			open(ima); 
+			name = getTitle;
+			proi = pt+i+".roi";	
+			open(proi);
+			run("Clear Outside"); 
+			run("Split Channels"); 
+			//selectWindow(name+" (green)");
+			close();
+			//run("Colocalisation Test", "channel_1=["+ima+" (red)] channel_2=["+ima+" (green)] roi=None randomization=[Costes approximation (smoothed noise)]");
+			run("Manders Coefficients", "channel_1=["+ima+" (red)] channel_2=["+ima+" (green)] channel=[Red : Green] use=None current_slice_only use_threshold exclude_zero-zero_pixels");
+			close(); 
+			close(); 
+		}
+	}	
+}
+saveAs("Measurements", pt+"colog_result_manders.csv"); 
+saveAs("Measurements", pt+"colog_result_manders.xls");
+selectWindow ("Results");
+run ("Close");
+
+
+//https://doi.org/10.1080/00219266.2018.1451772
+//http://cshprotocols.cshlp.org/content/2007/7/pdb.prot4792.long
