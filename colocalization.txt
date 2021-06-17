@@ -1,3 +1,5 @@
+//All the images are numbered as 1, 2, 3...'.tif'. Respective ROIs are saved in the same folder with the same name.
+
 run("Color Picker..."); 
 setForegroundColor(0, 0, 0);
 setBackgroundColor(0, 0, 0);
@@ -24,12 +26,10 @@ function listFiles(pt) {
 				roiManager("Select", j);
 				run("Clear Outside"); 
 				run("Split Channels"); 
-				//selectWindow(name+" (green)");
 				close();
-				//run("Colocalisation Test", "channel_1=["+ima+" (red)] channel_2=["+ima+" (green)] roi=None randomization=[Costes approximation (smoothed noise)]");
 				run("Manders Coefficients", "channel_1=["+ima+" (red)] channel_2=["+ima+" (green)] channel=[Red : Green] use=None current_slice_only use_threshold exclude_zero-zero_pixels");
-				close(); // closes red channel
-				close(); // // closes green channel to get ready for next iteration
+				close(); 
+				close(); 
 				j = j+1;
 			}
 			if (isOpen("ROI Manager")) {
@@ -44,9 +44,7 @@ function listFiles(pt) {
 			open(proi);
 			run("Clear Outside"); 
 			run("Split Channels"); 
-			//selectWindow(name+" (green)");
 			close();
-			//run("Colocalisation Test", "channel_1=["+ima+" (red)] channel_2=["+ima+" (green)] roi=None randomization=[Costes approximation (smoothed noise)]");
 			run("Manders Coefficients", "channel_1=["+ima+" (red)] channel_2=["+ima+" (green)] channel=[Red : Green] use=None current_slice_only use_threshold exclude_zero-zero_pixels");
 			close(); 
 			close(); 
@@ -57,7 +55,3 @@ saveAs("Measurements", pt+"colog_result_manders.csv");
 saveAs("Measurements", pt+"colog_result_manders.xls");
 selectWindow ("Results");
 run ("Close");
-
-
-//https://doi.org/10.1080/00219266.2018.1451772
-//http://cshprotocols.cshlp.org/content/2007/7/pdb.prot4792.long
