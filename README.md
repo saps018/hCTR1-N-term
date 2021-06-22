@@ -1,4 +1,4 @@
 # hCTR1-N-term
-This contain all the codes used in image analysis and exon composition analysis in the research article.
+This repository contains all the codes for image analysis and exon composition analysis, used in this research article.
 
 written by Saptarshi MAji
